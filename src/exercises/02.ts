@@ -39,7 +39,7 @@ const deliverPun = (mis: Misbehavior) => (chn: Channel) =>
     Effect.bind("client", () => PunsterClient),
     Effect.bind("network", () => PunDistributionNetwork),
     Effect.bind("pun", ({ client }) => client.createPun(mis)),
-    Effect.andThen(({ pun, network }) => network.deliverPun(pun, mis, chn))
+    Effect.andThen(({ pun, network }) => network.deliverPun(pun, mis, chn)),
   );
 
 //                 ┏━━━━━━━━━━━━━━━━━━━━ string
@@ -50,7 +50,7 @@ const misbehaviorToPun = (mis: Misbehavior) =>
   PunDistributionNetwork.pipe(
     Effect.andThen((service) => service.getChannel(mis)),
     Effect.andThen(deliverPun(mis)),
-    Effect.tap(Console.log)
+    Effect.tap(Console.log),
   );
 
 export const main = pipe(
@@ -61,7 +61,7 @@ export const main = pipe(
     ChildImmuneError: () => Console.warn("Child had an immunity token"),
     PunsterFetchError: () =>
       Console.error("Pun failed to be fetched from PUNSTER"),
-  })
+  }),
 );
 
 //                                   ┏━ Will error cause PunsterClient | PunDistributionNetwork are not provided

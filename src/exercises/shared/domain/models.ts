@@ -1,16 +1,16 @@
-import { DateTime, Duration, Effect, Order, Schema } from "effect"
+import { DateTime, Duration, Effect, Order, Schema } from "effect";
 
-const PositiveInt = Schema.Int.pipe(Schema.positive())
+const PositiveInt = Schema.Int.pipe(Schema.positive());
 
 /**
  * Represents the severity of a pun, `5` being the most groan-inducing and `1`
  * being the least groan-inducing.
  */
 export const Severity = Schema.Literal(1, 2, 3, 4, 5).annotations({
-  identifier: "Severity"
-})
+  identifier: "Severity",
+});
 
-export type Severity = typeof Severity.Type
+export type Severity = typeof Severity.Type;
 
 /**
  * Represents the different types of communication channels available for
@@ -21,26 +21,26 @@ export const ChannelType = Schema.Literal(
   "CarRide",
   "BedtimeRoutine",
   "FamilyGathering",
-  "HomeworkSession"
-).annotations({ identifier: "ChannelType" })
+  "HomeworkSession",
+).annotations({ identifier: "ChannelType" });
 
-export type ChannelType = typeof ChannelType.Type
+export type ChannelType = typeof ChannelType.Type;
 
 /**
  * A score from `1-100` which repreents how receptive an audience will be to
  * puns.
  */
-export const Receptivity = PositiveInt.pipe(
-  Schema.between(1, 100)
-).annotations({ identifier: "Receptivity" })
+export const Receptivity = PositiveInt.pipe(Schema.between(1, 100)).annotations(
+  { identifier: "Receptivity" },
+);
 
-export type Receptivity = typeof Receptivity.Type
+export type Receptivity = typeof Receptivity.Type;
 
 /**
  * Disabling validation for statically constructed schemas to avoid the
  * overhead, given schema validation is not necessary in this case.
  */
-const constDisableValidation = { disableValidation: true }
+const constDisableValidation = { disableValidation: true };
 
 /**
  * Represents a communication channel for distributing puns.
@@ -61,49 +61,64 @@ export class Channel extends Schema.Class<Channel>("Channel")({
   /**
    * The time that the channel was last used.
    */
-  lastUsed: Schema.optionalWith(Schema.DateTimeUtcFromNumber, { exact: true })
+  lastUsed: Schema.optionalWith(Schema.DateTimeUtcFromNumber, { exact: true }),
 }) {
   static AllTypes: ReadonlyArray<Channel> = [
-    Channel.make({
-      type: "BedtimeRoutine",
-      receptivity: 75,
-      cooldown: Duration.hours(24)
-    }, constDisableValidation),
-    Channel.make({
-      type: "CarRide",
-      receptivity: 65,
-      cooldown: Duration.minutes(30)
-    }, constDisableValidation),
-    Channel.make({
-      type: "DinnerConversation",
-      receptivity: 80,
-      cooldown: Duration.hours(1)
-    }, constDisableValidation),
-    Channel.make({
-      type: "FamilyGathering",
-      receptivity: 90,
-      cooldown: Duration.hours(2)
-    }, constDisableValidation),
-    Channel.make({
-      type: "HomeworkSession",
-      receptivity: 45,
-      cooldown: Duration.hours(3)
-    }, constDisableValidation)
-  ]
+    Channel.make(
+      {
+        type: "BedtimeRoutine",
+        receptivity: 75,
+        cooldown: Duration.hours(24),
+      },
+      constDisableValidation,
+    ),
+    Channel.make(
+      {
+        type: "CarRide",
+        receptivity: 65,
+        cooldown: Duration.minutes(30),
+      },
+      constDisableValidation,
+    ),
+    Channel.make(
+      {
+        type: "DinnerConversation",
+        receptivity: 80,
+        cooldown: Duration.hours(1),
+      },
+      constDisableValidation,
+    ),
+    Channel.make(
+      {
+        type: "FamilyGathering",
+        receptivity: 90,
+        cooldown: Duration.hours(2),
+      },
+      constDisableValidation,
+    ),
+    Channel.make(
+      {
+        type: "HomeworkSession",
+        receptivity: 45,
+        cooldown: Duration.hours(3),
+      },
+      constDisableValidation,
+    ),
+  ];
 
   static OrderReceptivityDesc = Order.mapInput(
     Order.number,
-    (channel: Channel) => channel.receptivity
-  )
+    (channel: Channel) => channel.receptivity,
+  );
 
   get isAvailable(): Effect.Effect<boolean> {
-    return Effect.gen(this, function*() {
+    return Effect.gen(this, function* () {
       if (this.lastUsed === undefined) {
-        return true
+        return true;
       }
-      const now = yield* DateTime.now
-      return DateTime.lessThanOrEqualTo(this.lastUsed, now)
-    })
+      const now = yield* DateTime.now;
+      return DateTime.lessThanOrEqualTo(this.lastUsed, now);
+    });
   }
 }
 
@@ -115,8 +130,8 @@ export class Misbehavior extends Schema.Class<Misbehavior>("Misbehavior")({
   /** A detailed description of the misbehavior */
   description: Schema.String,
   /** The severity score of the misbehavior on a scale from 1-5 */
-  severity: Severity
-}) { }
+  severity: Severity,
+}) {}
 
 export class Pun extends Schema.Class<Pun>("Pun")({
   /** The setup line for the pun */
@@ -124,8 +139,8 @@ export class Pun extends Schema.Class<Pun>("Pun")({
   /** The punch line of the pun */
   punchline: Schema.String,
   /** The likelihood that a pun will induce a groan from its recipient on a scale from 1-100 */
-  groanPotential: PositiveInt.pipe(Schema.between(1, 100))
-}) { }
+  groanPotential: PositiveInt.pipe(Schema.between(1, 100)),
+}) {}
 
 export const DurationFromSeconds = Schema.transform(
   /**
@@ -136,15 +151,17 @@ export const DurationFromSeconds = Schema.transform(
   {
     strict: true,
     decode: (i) => Duration.seconds(i),
-    encode: (a) => Duration.toSeconds(a)
-  }
-).annotations({ identifier: "DurationFromSeconds" })
+    encode: (a) => Duration.toSeconds(a),
+  },
+).annotations({ identifier: "DurationFromSeconds" });
 
 /**
  * A comprehensive evaluation report generated after a pun is delivered to its
  * recipient.
  */
-export class PunDeliveryReport extends Schema.Class<PunDeliveryReport>("PunDeliveryReport")({
+export class PunDeliveryReport extends Schema.Class<PunDeliveryReport>(
+  "PunDeliveryReport",
+)({
   /** Summary of the overall pun delivery effectiveness */
   executiveSummary: Schema.String,
   /** Detailed narrative of how the pun delivery unfolded */
@@ -164,6 +181,6 @@ export class PunDeliveryReport extends Schema.Class<PunDeliveryReport>("PunDeliv
     /** Percentage likelihood of the child repeating the pun to others (0-100) */
     repeatProbability: Schema.Number.pipe(Schema.between(1, 100)),
     /** Score representing the overall success of the pun delivery (0-100) */
-    deliveryEffectiveness: PositiveInt.pipe(Schema.between(1, 100))
-  })
-}) { }
+    deliveryEffectiveness: PositiveInt.pipe(Schema.between(1, 100)),
+  }),
+}) {}

@@ -32,7 +32,7 @@ export class PunClient extends Context.Tag("app/PunClient")<
   PunClient,
   {
     readonly createPun: (
-      misbehavior: Misbehavior
+      misbehavior: Misbehavior,
     ) => Effect.Effect<
       Pun,
       ChildImmuneError | MalformedPunError | PunsterFetchError
@@ -40,7 +40,7 @@ export class PunClient extends Context.Tag("app/PunClient")<
     readonly evaluatePun: (
       pun: Pun,
       misbehavior: Misbehavior,
-      channel: Channel
+      channel: Channel,
     ) => Effect.Effect<string, PunsterFetchError>;
   }
 >() {}
@@ -50,17 +50,17 @@ export class PunClient extends Context.Tag("app/PunClient")<
  * the most optimal communication channels for delivering puns.
  */
 export class PunDistributionNetwork extends Context.Tag(
-  "app/PunDistributionNetwork"
+  "app/PunDistributionNetwork",
 )<
   PunDistributionNetwork,
   {
     readonly getChannel: (
-      misbehavior: Misbehavior
+      misbehavior: Misbehavior,
     ) => Effect.Effect<Channel, NoChannelAvailableError>;
     readonly deliverPun: (
       pun: Pun,
       misbehavior: Misbehavior,
-      channel: Channel
+      channel: Channel,
     ) => Effect.Effect<string>;
   }
 >() {}
@@ -71,17 +71,17 @@ export class PunDistributionNetwork extends Context.Tag(
  * tokens are reset each day at `00:00`.
  */
 export class ImmunityTokenManager extends Context.Tag(
-  "app/ImmunityTokenManager"
+  "app/ImmunityTokenManager",
 )<
   ImmunityTokenManager,
   {
     readonly getBalance: (childName: string) => Effect.Effect<number>;
     readonly awardToken: (
       childName: string,
-      options: { readonly reason: string }
+      options: { readonly reason: string },
     ) => Effect.Effect<void>;
     readonly useToken: (
-      childName: string
+      childName: string,
     ) => Effect.Effect<number, NoTokenAvailableError>;
   }
 >() {}
