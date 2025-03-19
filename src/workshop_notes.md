@@ -133,3 +133,18 @@ const run = Effect.runSync(runnable);
 ## Forking Fibers
 
 `Effect.runTime()` access current runtime without the need for having no requirements
+
+## Effect in the Frontend
+
+use `ManagedRuntime` to intergrate Effect services into coponents,
+
+- use `Context` to pass runtime into component tree
+
+```ts
+const runtime = ManagedRuntime.make(OpenAi.Default);
+declare const effect: Effect.Effect<void, never, OpenAi>;
+
+runtime.runPromise(effect);
+```
+
+
