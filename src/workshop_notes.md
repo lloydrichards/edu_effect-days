@@ -91,3 +91,41 @@ const makeFileSystemCache = FileSystem.pipe(
 ```
 
 ## Layers
+
+```ts
+//              ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━ Services Out
+//              ┃           ┏━━━━━━━━━━━━━━━━ Errors in constructing the service
+//              ┃           ┃          ┏━━━━━ Services in
+// Layer<RequirementsOut, Error, RequirementsIn>
+
+const neverFail = Layer.succeed(Cache, {
+  lookup: (key) => Effect.succeed(`${key}-mock`),
+});
+
+const effectful = Layer.effect(
+  Cache,
+  Effect.succeed({ lookup: () => Effect.succeed("mock") }),
+);
+```
+
+### Resourceful Layers
+
+```ts
+const resourcefulOperation = (key: string) =>
+  Effect.acquireRelease(
+    Console.log(`Acquiring ${key}`),
+    // The below finalizer will be added to the `Scope`
+    () => Console.log(`Releasing ${key}`),
+  );
+
+const program = pipe(
+  resourcefulOperation("1"),
+  Effect.flatMap(() => resourcefulOperation("2")),
+  Effect.flatMap(() => resourcefulOperation("3")),
+  Effect.flatMap(() => resourcefulOperation("4")),
+);
+
+const runnable = Effect.scoped(program);
+
+const run = Effect.runSync(runnable);
+```
