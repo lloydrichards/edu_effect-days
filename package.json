@@ -9,8 +9,7 @@
     "test": "bun test",
     "lint": "bun run eslint .",
     "format": "bun run prettier .",
-    "workshop": "bun run src/workshop.ts",
-    "exercise": "bun run src/exercise/01.ts"
+    "workshop": "bun run src/workshop.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
@@ -19,6 +18,11 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@effect/experimental": "^0.43.3",
+    "@effect/platform": "^0.79.3",
+    "@effect/printer": "^0.41.12",
+    "@effect/printer-ansi": "^0.41.12",
+    "@effect/vitest": "^0.19.10",
     "effect": "^3.13.12"
   }
 }

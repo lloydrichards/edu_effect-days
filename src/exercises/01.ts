@@ -28,7 +28,7 @@ import type { Channel, Misbehavior, Pun } from "./shared/domain/models";
  * The Punster Client is responsible for interacting with PUNSTER to create puns
  * and perform evaluations on pun delivery.
  */
-class PunClient extends Context.Tag("app/PunClient")<
+export class PunClient extends Context.Tag("app/PunClient")<
   PunClient,
   {
     readonly createPun: (
@@ -49,7 +49,9 @@ class PunClient extends Context.Tag("app/PunClient")<
  * The Pun Distribution Network (PDN) is responsible for controlling access to
  * the most optimal communication channels for delivering puns.
  */
-class PunDistributionNetwork extends Context.Tag("app/PunDistributionNetwork")<
+export class PunDistributionNetwork extends Context.Tag(
+  "app/PunDistributionNetwork"
+)<
   PunDistributionNetwork,
   {
     readonly getChannel: (
@@ -68,7 +70,9 @@ class PunDistributionNetwork extends Context.Tag("app/PunDistributionNetwork")<
  * immunity tokens, providing positive reinforcement for good behavior. All
  * tokens are reset each day at `00:00`.
  */
-class ImmunityTokenManager extends Context.Tag("app/ImmunityTokenManager")<
+export class ImmunityTokenManager extends Context.Tag(
+  "app/ImmunityTokenManager"
+)<
   ImmunityTokenManager,
   {
     readonly getBalance: (childName: string) => Effect.Effect<number>;
