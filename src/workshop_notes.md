@@ -129,3 +129,7 @@ const runnable = Effect.scoped(program);
 
 const run = Effect.runSync(runnable);
 ```
+
+## Forking Fibers
+
+`Effect.runTime()` access current runtime without the need for having no requirements
