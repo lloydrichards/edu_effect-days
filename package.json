@@ -5,9 +5,12 @@
   "private": true,
   "scripts": {
     "start": "bun run src/index.ts",
+    "play": "bun run scratchpad.ts",
     "test": "bun test",
     "lint": "bun run eslint .",
-    "format": "bun run prettier ."
+    "format": "bun run prettier .",
+    "workshop": "bun run src/workshop.ts",
+    "exercise": "bun run src/exercise/01.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"
